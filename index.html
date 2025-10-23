@@ -1,32 +1,59 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="style.css">
-        <title>Альфа-версия проекта</title>
-    </head>
-    <body>
-        <header>
-            <h1 id="title">Проект</h1>
-        </header>
-        <nav>
-            <p><a href="#calchead">Калькулятор</a></p>
-            <p><a href="#convhead"></a>Конверсия чисел</p>
-            <p><a href="#dethead"></a>Детерминант</p>
-        </nav>
-        <main>
-            <section id="calculator">
-                <h3><a name="calchead">Калькулятор. Да, просто обычный калькулятор</a></h3>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <title>Альфа-версия проекта</title>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <h1>Проект</h1>
+        </div>
+    </header>
+
+    <!-- Навигационное меню -->
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#section1">Калькулятор</a></li>
+                <li><a href="#section2">Конвертор чисел</a></li>
+                <li><a href="#section3">Рассчёт детерминанта</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Основное содержимое -->
+    <main class="main">
+        <div class="container">
+            <!-- Раздел 1 -->
+            <section id="section1" class="section">
+                <h2>Калькулятор</h2>
+                <div class="content">
+                    <p>Раздел 1</p>
+                </div>
             </section>
-            <section id="conversion">
-                <h3><a name="convhead">Конверсия чисел из одной системы счисления в другую</a></h3>
+
+            <!-- Раздел 2 -->
+            <section id="section2" class="section">
+                <h2>Конвертор чисел из одних систем счисления в другие</h2>
+                <div class="content">
+                    <p>Раздел 2</p>
+                </div>
             </section>
-            <section id="determinant">
-                <h3><a name="dethead">Рассчёт детерминанта размером 3x3</a></h3>
+
+            <!-- Раздел 3 -->
+            <section id="section3" class="section">
+                <h2>Рассчёт детерминанта размером 3x3</h2>
+                <div class="content">
+                    <p>Раздел 3</p>
+                </div>
             </section>
-        </main>
-    </body>
+        </div>
+    </main>
+</body>
 </html>
