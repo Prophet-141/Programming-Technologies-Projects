@@ -1,13 +1,24 @@
-a = str(input('Введите число: '))
-osnovan = int(input('Введите систему счисления числа: '))
-drugoe = int(input('Введите систему счисления, в которую нужно перевести: '))
-alf = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-c = []
-otvet = ''
+# Изначальные данные и константы.
+SYMBOLS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+SYSTEMS = '₀₁₂₃₄₅₆₇₈₉'
+digits = []
+answer = ''
 summ = 0
-f = True
-g = True
-n = True
+not_bigger_than_system_base = True
+correct_format = True
+non_existing_system_base = False
+
+# Функция для создания маленьких чисел системы счисления.
+def system_modifier(system):
+    if len(str(system)) == 1:
+        system = SYSTEMS[system]
+    else:
+        digit1 = int(system / 10)
+        digit2 = int(system % 10)
+        digit1 = SYSTEMS[digit1]
+        digit2 = SYSTEMS[digit2]
+        system = str(digit1) + str(digit2)
+    return system
 
 if osnovan == drugoe:
     g = False
@@ -100,4 +111,5 @@ if (f == True) and (g == True) and (n == True):
                 otvet = str(shest) + otvet
             else:
                 otvet = str(shest) + otvet
+
         print(otvet,'(',drugoe,')') #Десятеричная система счисления в шестнадцатеричной системе счисления
