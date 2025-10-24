@@ -74,12 +74,15 @@ if non_existing_system_base == True:
 # Перевод из 10-тичной системы счисления в любую другую систему счисления.
 if (not_bigger_than_system_base == True) and (correct_format == True) and (non_existing_system_base == False):
     if initial_system_base == 10 and transfer_to_system_base >= 2 and transfer_to_system_base != 10:
-        while int(num) > 0:
-            ost = int(num) % transfer_to_system_base
-            ost = SYMBOLS[ost]
-            answer = str(ost) + answer
-            num = int(num) // transfer_to_system_base
-        print(f'{answer}{system_modifier(transfer_to_system_base)}')
+        if int(num) != 0:
+            while int(num) > 0:
+                ost = int(num) % transfer_to_system_base
+                ost = SYMBOLS[ost]
+                answer = str(ost) + answer
+                num = int(num) // transfer_to_system_base
+            print(f'{answer}{system_modifier(transfer_to_system_base)}')
+        else:
+            print(f'0{system_modifier(transfer_to_system_base)}')
 
     # Перевод из любой системы счисления в 10-тичную систему счисления.
     elif (transfer_to_system_base == 10) and (initial_system_base >= 2) and (initial_system_base != 10):
@@ -89,16 +92,18 @@ if (not_bigger_than_system_base == True) and (correct_format == True) and (non_e
             summ = perevod1 + summ
         print(f'{summ}{system_modifier(transfer_to_system_base)}')
 
-# Перевод из любой системы счисления в другую любую систему счисления.
+    # Перевод из любой системы счисления в другую любую систему счисления.
     else:
-        digits.reverse()
-        for i in range(len(digits)):
-            perevod1 = int(digits[i]) * (initial_system_base ** i)
-            summ = perevod1 + summ
-
-        while summ > 0:
-            ost = summ % transfer_to_system_base
-            ost = SYMBOLS[ost]
-            answer = str(ost) + answer
-            summ = summ // transfer_to_system_base
-        print(f'{answer}{system_modifier(transfer_to_system_base)}')
+        if summ != 0:
+            digits.reverse()
+            for i in range(len(digits)):
+                perevod1 = int(digits[i]) * (initial_system_base ** i)
+                summ = perevod1 + summ
+            while summ > 0:
+                ost = summ % transfer_to_system_base
+                ost = SYMBOLS[ost]
+                answer = str(ost) + answer
+                summ = summ // transfer_to_system_base
+            print(f'{answer}{system_modifier(transfer_to_system_base)}')
+        else:
+            print(f'0{system_modifier(transfer_to_system_base)}')
