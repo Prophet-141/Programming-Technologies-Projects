@@ -43,14 +43,36 @@ for letter in num:
         correct_format = False
         break
 
-if g == False:
-    print('Основания должны отличаться друг от друга.')
+# Замена букв в числе на цифры (если буквы есть) и запись в массив + проверка на непревышение системы счисления.
+if (correct_format == True) and (non_existing_system_base == False):
+    for i in num:
+        i = SYMBOLS.index(i.upper())
+        if int(i) <= initial_system_base - 1:
+            digits.append(str(i))
+        else:
+            not_bigger_than_system_base = False
+            break
 
-if f == False:
-    print(osnovan,'система счисления начинается от 0 и заканчивается',osnovan-1,'. Введите число заново.')
+# Проверка, чтобы цифры в числе не превышали значение системы счисления числа (Отрицательный результат).
+if not_bigger_than_system_base == False:
+    print(f'Число {num} не соответствует системе счисления {initial_system_base}. Пожалуйста, введите число заново.')
 
-if n == False:
-    print('Неправильный формат. Если вы пишите букву, то она должа быть Английской, а не Русской. Введите число заново. ')
+# Проверка, чтобы число не содержало некорректных символов (Отрицательный результат).
+if (correct_format == False):
+    print(f'Неправильный формат. В числе {num} присутствует некорректый символ. Пожалуйста, введите число заново. ')
+
+# Проверка на корректность системы счисления (Отрицательный результат).
+if non_existing_system_base == True:
+    if isinstance(initial_system_base, int):
+        if initial_system_base < 2:
+            print(f'Исходной системы счисления, равной {initial_system_base}, не существует. '
+                  f'Пожалуйста, введите систему счисления заново.')
+    if isinstance(transfer_to_system_base, int):
+        if transfer_to_system_base < 2:
+            print(f'Системы счисления {transfer_to_system_base}, в которую нужно перевести, не существует. '
+                  f'Пожалуйста, введите систему счисления заново.')
+    elif not(initial_system_base.isdigit()) or not(transfer_to_system_base.isdigit()):
+        print('Введённые системы счисления содержат недопустимые символы или их не существует.')
 
 if (f == True) and (g == True) and (n == True):
     if osnovan == 10 and drugoe >= 2 and drugoe != 10:
@@ -109,4 +131,5 @@ if (f == True) and (g == True) and (n == True):
                 otvet = str(shest) + otvet
 
         print(otvet,'(',drugoe,')') #Десятеричная система счисления в шестнадцатеричной системе счисления
+
 
