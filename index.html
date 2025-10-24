@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-    <title>Альфа-версия проекта</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.5.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.5.1/core.js"></script>
+    <title>Бета-версия проекта</title>
 </head>
 <body>
     <!-- Шапка сайта -->
     <header class="header">
         <div class="container">
-            <h1>Проект</h1>
+            <h1>CalcHub</h1>
         </div>
     </header>
 
@@ -34,7 +34,11 @@
             <section id="section1" class="section">
                 <h2>Калькулятор</h2>
                 <div class="content">
-                    <p>Раздел 1</p>
+                    <div id="output1"></div>
+                    <script type="py">
+                        from pyscript import display
+                        display("Hi!")
+                    </script>
                 </div>
             </section>
 
@@ -42,7 +46,11 @@
             <section id="section2" class="section">
                 <h2>Конвертор чисел из одних систем счисления в другие</h2>
                 <div class="content">
-                    <p>Раздел 2</p>
+                    <div id="output2"></div>
+                    <script type="py">
+                        from pyscript import display
+                        display("Hi!")
+                    </script>
                 </div>
             </section>
 
@@ -50,7 +58,11 @@
             <section id="section3" class="section">
                 <h2>Рассчёт детерминанта размером 3x3</h2>
                 <div class="content">
-                    <p>Раздел 3</p>
+                    <div id="output3"></div>
+                    <script type="py">
+                        from pyscript import display
+                        display("Hi!")
+                    </script>
                 </div>
             </section>
         </div>
