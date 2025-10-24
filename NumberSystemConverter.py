@@ -20,8 +20,6 @@ def system_modifier(system):
         system = str(digit1) + str(digit2)
     return system
 
-
-
 # Вводные данные
 num = str(input('Введите число: '))
 initial_system_base = str(input('Введите систему счисления числа: '))
@@ -121,6 +119,7 @@ if (not_bigger_than_system_base == True) and (correct_format == True) and (non_e
                 otvet = str(shest) + otvet
 
         print(otvet,'(',drugoe,')') #Десятеричная система счисления в шестнадцатеричной системе счисления
+
 
 
 
