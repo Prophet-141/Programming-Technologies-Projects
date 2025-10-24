@@ -23,29 +23,25 @@ def system_modifier(system):
 if osnovan == drugoe:
     g = False
 
-for i in a:
-    if i == 'А' or i == 'а':
-        n = False
-    if i == 'В' or i == 'в':
-        n = False
-    if i == 'С' or i == 'с':
-        n = False
-    if i == 'Д' or i == 'д':
-        n = False
-    if i == 'Е' or i == 'е':
-        n = False
-    if i == 'Ф' or i == 'ф':
-        n = False
+# Вводные данные
+num = str(input('Введите число: '))
+initial_system_base = str(input('Введите систему счисления числа: '))
+transfer_to_system_base = str(input('Введите систему счисления, в которую нужно перевести: '))
 
-if (g == True) and (n == True):
-    for i in a:
-        i = alf.find(i)
-        print(i)
-        if int(i) <= osnovan-1:
-            c.append(str(i))
-        else:
-            f = False
-            break
+# Проверка на корректность системы счисления.
+if (not(initial_system_base.isdigit())) or (not(transfer_to_system_base.isdigit())):
+    non_existing_system_base = True
+else:
+    initial_system_base = int(initial_system_base)
+    transfer_to_system_base = int(transfer_to_system_base)
+    if (initial_system_base < 2) or (transfer_to_system_base < 2):
+        non_existing_system_base = True
+
+# Проверка формата числа (нет ли некорректных символов).
+for letter in num:
+    if letter.upper() not in SYMBOLS:
+        correct_format = False
+        break
 
 if g == False:
     print('Основания должны отличаться друг от друга.')
@@ -113,3 +109,4 @@ if (f == True) and (g == True) and (n == True):
                 otvet = str(shest) + otvet
 
         print(otvet,'(',drugoe,')') #Десятеричная система счисления в шестнадцатеричной системе счисления
+
