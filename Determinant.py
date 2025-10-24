@@ -13,9 +13,7 @@ def det3(mat, n):
                     if mat[k][z]!=0:
                         prov+=1
                         for c in range(0, n):
-                            butter = mat[c][z]
-                            mat[c][z] = mat[c][k]
-                            mat[c][k] = butter
+                            mat[c][k] += mat[c][z]
                         v = mat[i][k]/mat[k][k]
                         z = n
                 if prov == 0:
@@ -38,8 +36,12 @@ print("Самостоятельный ввод(1) или случайный(2)?"
 vyb = int(input())
 if vyb == 1:
     for i in range(n):
-        for j in range(n):
-            stroca.append(int(input()))
+        user_input = input("Введите целые числа через пробел: ")
+        es = user_input.split()
+        stroca = list(map(int, es))
+        if len(stroca) < n:
+            for z in range(len(stroca), n):
+                stroca.append(0)
         mat.append(stroca)
         stroca = []
 elif vyb == 2:
