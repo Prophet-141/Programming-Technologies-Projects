@@ -39,11 +39,34 @@
             <section id="section1" class="section">
                 <h2>Калькулятор</h2>
                 <div class="content">
-                    <div id="output1"></div>
-                    <script type="py">
-                        from pyscript import display
-                        display("Hi!")
-                    </script>
+                    <div class="calculator">
+                        <input type="text" id="calcDisplay" class="display" readonly value="0">
+                        <div class="buttons">
+                            <button class="btn clear" onclick="clearDisplay()">C</button>
+                            <button class="btn clear" onclick="deleteLast()">⌫</button>
+                            <button class="btn operator" onclick="appendToDisplay('/')">/</button>
+                            <button class="btn operator" onclick="appendToDisplay('*')">×</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('7')">7</button>
+                            <button class="btn number" onclick="appendToDisplay('8')">8</button>
+                            <button class="btn number" onclick="appendToDisplay('9')">9</button>
+                            <button class="btn operator" onclick="appendToDisplay('-')">-</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('4')">4</button>
+                            <button class="btn number" onclick="appendToDisplay('5')">5</button>
+                            <button class="btn number" onclick="appendToDisplay('6')">6</button>
+                            <button class="btn operator" onclick="appendToDisplay('+')">+</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('1')">1</button>
+                            <button class="btn number" onclick="appendToDisplay('2')">2</button>
+                            <button class="btn number" onclick="appendToDisplay('3')">3</button>
+                            <button class="btn operator" onclick="appendToDisplay('.')">.</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('0')">0</button>
+                            <button class="btn number" onclick="appendToDisplay('00')">00</button>
+                            <button class="btn equals" onclick="calculate()">=</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -72,5 +95,77 @@
             </section>
         </div>
     </main>
+
+    <script>
+        let display = document.getElementById('calcDisplay');
+        let currentInput = '0';
+        let shouldResetDisplay = false;
+
+        function appendToDisplay(value) {
+            if (currentInput === '0' || shouldResetDisplay) {
+                currentInput = value;
+                shouldResetDisplay = false;
+            } else {
+                currentInput += value;
+            }
+            display.value = currentInput;
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            display.value = currentInput;
+            shouldResetDisplay = false;
+        }
+
+        function deleteLast() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            display.value = currentInput;
+        }
+
+        function calculate() {
+            try {
+                // Заменяем × на * для вычисления
+                let expression = currentInput.replace(/×/g, '*');
+                
+                // Безопасное вычисление выражения
+                let result = eval(expression);
+                
+                // Проверка на бесконечность и NaN
+                if (!isFinite(result)) {
+                    throw new Error('Invalid calculation');
+                }
+                
+                currentInput = result.toString();
+                display.value = currentInput;
+                shouldResetDisplay = true;
+                
+            } catch (error) {
+                display.value = 'Ошибка';
+                currentInput = '0';
+                shouldResetDisplay = true;
+            }
+        }
+
+        // Поддержка клавиатуры
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (/[0-9]/.test(key)) {
+                appendToDisplay(key);
+            } else if (['+', '-', '*', '/', '.'].includes(key)) {
+                appendToDisplay(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Escape' || key === 'c' || key === 'C') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            }
+        });
+    </script>
 </body>
 </html>
