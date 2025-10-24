@@ -20,8 +20,7 @@ def system_modifier(system):
         system = str(digit1) + str(digit2)
     return system
 
-if osnovan == drugoe:
-    g = False
+
 
 # Вводные данные
 num = str(input('Введите число: '))
@@ -74,36 +73,27 @@ if non_existing_system_base == True:
     elif not(initial_system_base.isdigit()) or not(transfer_to_system_base.isdigit()):
         print('Введённые системы счисления содержат недопустимые символы или их не существует.')
 
-if (f == True) and (g == True) and (n == True):
-    if osnovan == 10 and drugoe >= 2 and drugoe != 10:
-        while int(a) > 0:
-            shest = int(a) % drugoe
-            a = int(a) // drugoe
-            if drugoe > 10:
-                if shest == 10:
-                    shest = 'A'
-                if shest == 11:
-                    shest = 'B'
-                if shest == 12:
-                    shest = 'C'
-                if shest == 13:
-                    shest = 'D'
-                if shest == 14:
-                    shest = 'E'
-                if shest == 15:
-                    shest = 'F'
-                otvet = str(shest) + otvet
-            else:
-                otvet = str(shest) + otvet
-        print(otvet,'(',drugoe,')') #Десятеричная система счисления в шестнадцатеричной системе счисления
+# Перевод из 10-тичной системы счисления в любую другую систему счисления.
+if (not_bigger_than_system_base == True) and (correct_format == True) and (non_existing_system_base == False):
+    if initial_system_base == 10 and transfer_to_system_base >= 2 and transfer_to_system_base != 10:
+        while int(num) > 0:
+            ost = int(num) % transfer_to_system_base
+            ost = SYMBOLS[ost]
+            answer = str(ost) + answer
+            num = int(num) // transfer_to_system_base
+        print(f'{answer}{system_modifier(transfer_to_system_base)}')
 
-    elif drugoe == 10 and osnovan >= 2 and osnovan != 10:
-        c.reverse()
-        for i in range(len(c)):
-            perevod1 = int(c[i])*(osnovan**i)
-            summ = perevod1+summ
-        print(summ,'(',drugoe,')') #Пятеричная система счисления в десятичной системе счисления
+    # Перевод из любой системы счисления в 10-тичную систему счисления.
+    elif (transfer_to_system_base == 10) and (initial_system_base >= 2) and (initial_system_base != 10):
+        digits.reverse()
+        for i in range(len(digits)):
+            perevod1 = int(digits[i]) * (initial_system_base ** i)
+            summ = perevod1 + summ
+        print(f'{summ}{system_modifier(transfer_to_system_base)}')
 
+
+
+    
     else:
         c.reverse()
         for i in range(len(c)):
@@ -131,5 +121,6 @@ if (f == True) and (g == True) and (n == True):
                 otvet = str(shest) + otvet
 
         print(otvet,'(',drugoe,')') #Десятеричная система счисления в шестнадцатеричной системе счисления
+
 
 
