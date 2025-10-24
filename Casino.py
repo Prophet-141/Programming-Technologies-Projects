@@ -1,17 +1,17 @@
 import random
 
 print('___________________________________')
-stavka = float(input('Кашелек: $'))
+stavka = float(input('Кошелек: $'))
 print('Играем? ;)')
 
 while input().capitalize() == 'Играем' and stavka != 0:
-    print('Сделай денежную ставку: ')
+    print('Сделай денежную ставку(в %: на число, на цвет, на четность): ')
     C = list(map(int, input().split()))
     C = [round(C[0] / 100 * stavka, 2), round(C[1] / 100 * stavka, 2), round(C[2] / 100 * stavka, 2)]
     stavka -= (C[0] + C[1] + C[2])
     print(*C)
 
-    print('Сделай ставку: ')
+    print('Сделай ставку (число, цвет, четность): ')
     B = list(map(str, input().split()))
     B[0] = int(B[0])
     B[1] = B[1].capitalize()
@@ -32,7 +32,7 @@ while input().capitalize() == 'Играем' and stavka != 0:
     else:
         A.append('Нечетное')
 
-    print('Главная ставка: ', *A)
+    print('Результат: ', *A)
 
     if A[0] == B[0]:
         C[0] *= 3
@@ -49,7 +49,7 @@ while input().capitalize() == 'Играем' and stavka != 0:
     print('___________________________________')
 
     stavka = round(stavka + C[0] + C[1] + C[2], 2)
-    print('Кашелек: $', stavka, sep='')
+    print('Кошелек: $', stavka, sep='')
 
     print('Играем? ;)')
 
@@ -58,3 +58,5 @@ print()
 print()
 print('             ВИДИМО, ВЫ ВСЕ ПРОИГРАЛИ :(')
 print('         ПОЖАЛУйСТА, ПОПОЛНИТЕ СЧЕТ, ЧТОБЫ ИГРАТЬ ДАЛЬШЕ’)
+
+
