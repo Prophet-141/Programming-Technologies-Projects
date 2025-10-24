@@ -3,10 +3,23 @@ def det2(mat):
     det2 = mat[0][0]*mat[1][1] - mat[0][1] * mat[1][0]
     return det2
 def det3(mat, n):
-    x = []
     for k in range(0, n-1):
         for i in range(k+1, n):
-            v = mat[i][k]/mat[k][k]
+            if mat[k][k]!=0:
+                v = mat[i][k]/mat[k][k]
+            else:
+                prov = 0
+                for z in range(k+1,n):
+                    if mat[k][z]!=0:
+                        prov+=1
+                        for c in range(0, n):
+                            butter = mat[c][z]
+                            mat[c][z] = mat[c][k]
+                            mat[c][k] = butter
+                        v = mat[i][k]/mat[k][k]
+                        z = n
+                if prov == 0:
+                    return 0
             for j in range(0, n):
                 mat[i][j] -= mat[k][j]*v
         print("Шаг " + str(k+1) + ":")
@@ -19,7 +32,6 @@ def det3(mat, n):
     return round(det)
 print("Введите размерность матрицы")
 n = int(input())
-x = []
 stroca = []
 mat = []
 print("Самостоятельный ввод(1) или случайный(2)?")
