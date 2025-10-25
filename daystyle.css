@@ -236,7 +236,6 @@ video {
     background: #c82333;
 }
 
-/* Стили для конвертера систем счисления */
 .converter-container {
     max-width: 500px;
     margin: 0 auto;
@@ -303,6 +302,7 @@ video {
     background: white;
     border-radius: 5px;
     border: 1px solid #ddd;
+    min-height: 20px;
 }
 
 .error-message {
@@ -313,4 +313,10 @@ video {
     background: rgba(231, 76, 60, 0.1);
     border-radius: 5px;
     border: 1px solid #e74c3c;
+    min-height: 20px;
+}
+
+.loading {
+    color: #3498db;
+    font-style: italic;
 }

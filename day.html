@@ -78,7 +78,7 @@
                     <div class="converter-container">
                         <div class="input-group">
                             <label for="numberInput">Число:</label>
-                            <input type="text" id="numberInput" placeholder="Введите число">
+                            <input type="text" id="numberInput" placeholder="Например: 255 или FF" value="23">
                         </div>
             
                         <div class="input-group">
@@ -91,7 +91,7 @@
                             <input type="number" id="toSystem" min="2" max="36" value="2" placeholder="От 2 до 36">
                         </div>
             
-                        <button onclick="convertNumber()" class="convert-btn">Конвертировать</button>
+                        <button onclick="convertWithPython()" class="convert-btn">Конвертировать</button>
             
                         <div class="result-container">
                             <label>Результат:</label>
@@ -106,10 +106,129 @@
             <!-- Раздел 3 -->
             <section id="section3" class="section">
                 <h2>Рассчёт детерминанта матрицы любого размера</h2>
-
             </section>
         </div>
     </main>
+
+    <!-- PyScript конвертер -->
+    <py-script>
+        # Изначальные данные и константы.
+        SYMBOLS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        SYSTEMS = '₀₁₂₃₄₅₆₇₈₉'
+        
+        # Функция для создания маленьких чисел системы счисления.
+        def system_modifier(system):
+            system = int(system)
+            if system < 10:
+                return SYSTEMS[system]
+            else:
+                digit1 = system // 10
+                digit2 = system % 10
+                return SYSTEMS[digit1] + SYSTEMS[digit2]
+        
+        def convert_number_python(num, initial_system_base, transfer_to_system_base):
+            try:
+                digits = []
+                answer = ''
+                summ = 0
+                not_bigger_than_system_base = True
+                correct_format = True
+                non_existing_system_base = False
+                
+                # Проверка на корректность системы счисления.
+                try:
+                    initial_system_base = int(initial_system_base)
+                    transfer_to_system_base = int(transfer_to_system_base)
+                    if (initial_system_base < 2) or (transfer_to_system_base < 2):
+                        non_existing_system_base = True
+                except:
+                    non_existing_system_base = True
+            
+                # Проверка формата числа (нет ли некорректных символов).
+                for letter in num:
+                    if letter.upper() not in SYMBOLS:
+                        correct_format = False
+                        break
+            
+                # Замена букв в числе на цифры (если буквы есть) и запись в массив + проверка на непревышение системы счисления.
+                if (correct_format == True) and (non_existing_system_base == False):
+                    for i in num:
+                        i = SYMBOLS.index(i.upper())
+                        if int(i) <= initial_system_base - 1:
+                            digits.append(str(i))
+                        else:
+                            not_bigger_than_system_base = False
+                            break
+            
+                # Проверка, чтобы цифры в числе не превышали значение системы счисления числа (Отрицательный результат).
+                if not_bigger_than_system_base == False:
+                    return f'Ошибка: Число {num} не соответствует системе счисления {initial_system_base}'
+            
+                # Проверка, чтобы число не содержало некорректных символов (Отрицательный результат).
+                if (correct_format == False):
+                    return f'Ошибка: Неправильный формат. В числе {num} присутствует некорректный символ'
+            
+                # Проверка на корректность системы счисления (Отрицательный результат).
+                if non_existing_system_base == True:
+                    return 'Ошибка: Система счисления должна быть числом от 2 до 36'
+            
+                if (not_bigger_than_system_base == True) and (correct_format == True) and (non_existing_system_base == False):
+                    # Перевод, когда исходная система счисления и та, в которую нужно перевести, равны.
+                    if (initial_system_base == transfer_to_system_base):
+                        return f'{num}{system_modifier(transfer_to_system_base)}'
+                        
+                    # Перевод из 10-тичной системы счисления в любую другую систему счисления.
+                    elif initial_system_base == 10:
+                        num_int = int(num)
+                        if num_int != 0:
+                            while num_int > 0:
+                                ost = num_int % transfer_to_system_base
+                                ost = SYMBOLS[ost]
+                                answer = str(ost) + answer
+                                num_int = num_int // transfer_to_system_base
+                            return f'{answer}{system_modifier(transfer_to_system_base)}'
+                        else:
+                            return f'0{system_modifier(transfer_to_system_base)}'
+            
+                    # Перевод из любой системы счисления в 10-тичную систему счисления.
+                    elif (transfer_to_system_base == 10):
+                        digits.reverse()
+                        for i in range(len(digits)):
+                            perevod1 = int(digits[i]) * (initial_system_base ** i)
+                            summ = perevod1 + summ
+                        return f'{summ}{system_modifier(transfer_to_system_base)}'
+            
+                    # Перевод из любой системы счисления в другую любую систему счисления.
+                    else:
+                        # Сначала переводим в десятичную
+                        digits_copy = digits.copy()
+                        digits_copy.reverse()
+                        for i in range(len(digits_copy)):
+                            perevod1 = int(digits_copy[i]) * (initial_system_base ** i)
+                            summ = perevod1 + summ
+                        
+                        # Затем из десятичной в целевую
+                        if summ != 0:
+                            while summ > 0:
+                                ost = summ % transfer_to_system_base
+                                ost = SYMBOLS[ost]
+                                answer = str(ost) + answer
+                                summ = summ // transfer_to_system_base
+                            return f'{answer}{system_modifier(transfer_to_system_base)}'
+                        else:
+                            return f'0{system_modifier(transfer_to_system_base)}'
+                
+                return 'Неизвестная ошибка'
+                
+            except Exception as e:
+                return f'Ошибка выполнения: {str(e)}'
+
+        print("Python конвертер загружен и готов к работе!")
+        
+        # Сохраняем функцию в глобальной области видимости
+        import js
+        js.window.python_convert_function = convert_number_python
+    </py-script>
 
     <script>
         // Java-Script Калькулятор
@@ -180,16 +299,17 @@
         });
 
         // Конвертер систем счисления
-        function convertNumber() {
+        function convertWithPython() {
             const numberInput = document.getElementById('numberInput').value.trim().toUpperCase();
-            const fromSystem = parseInt(document.getElementById('fromSystem').value);
-            const toSystem = parseInt(document.getElementById('toSystem').value);
+            const fromSystem = document.getElementById('fromSystem').value;
+            const toSystem = document.getElementById('toSystem').value;
             const resultElement = document.getElementById('conversionResult');
             const errorElement = document.getElementById('errorMessage');
         
             // Сброс сообщений об ошибках
             errorElement.textContent = '';
-            resultElement.textContent = '-';
+            resultElement.textContent = 'Вычисление...';
+            resultElement.className = 'result-display loading';
         
             // Проверка входных данных
             if (!numberInput) {
@@ -197,56 +317,58 @@
                 return;
             }
         
-            if (fromSystem < 2 || fromSystem > 36 || toSystem < 2 || toSystem > 36) {
-                showError('Система счисления должна быть от 2 до 36');
+            if (!fromSystem || !toSystem) {
+                showError('Пожалуйста, укажите системы счисления');
                 return;
             }
-        
-            // Проверка корректности числа для исходной системы счисления
-            const validChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.substring(0, fromSystem);
-            for (let char of numberInput) {
-                if (!validChars.includes(char)) {
-                    showError(`Символ '${char}' недопустим в системе счисления ${fromSystem}`);
-                    return;
-                }
-            }
-        
-            try {
-                // Конвертация через десятичную систему как промежуточную
-                const decimalValue = parseInt(numberInput, fromSystem);
-            
-                if (isNaN(decimalValue)) {
-                    showError('Ошибка при конвертации числа');
-                    return;
-                }
-            
-                // Конвертация в целевую систему счисления
-                const convertedNumber = decimalValue.toString(toSystem).toUpperCase();
-                resultElement.textContent = `${convertedNumber} (${toSystem})`;
-            } 
-            
-            catch (error) {
-            showError('Произошла ошибка при конвертации: ' + error.message);
-        }
-    }
-    
-    function showError(message) {
-        document.getElementById('errorMessage').textContent = message;
-    }
-    
-    // Поддержка клавиши Enter для конвертации
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            // Проверка, находится ли фокус в одном из полей конвертера
-            const activeElement = document.activeElement;
-            if (activeElement.id === 'numberInput' || 
-                activeElement.id === 'fromSystem' || 
-                activeElement.id === 'toSystem') {
-                convertNumber();
-            }
-        }
-    });
 
+            try {
+                // Проверяем, доступна ли Python функция
+                if (typeof window.python_convert_function === 'undefined') {
+                    showError('Python конвертер еще загружается. Подождите немного и попробуйте снова.');
+                    return;
+                }
+
+                // Вызов Python функции
+                const result = window.python_convert_function(numberInput, fromSystem, toSystem);
+                
+                resultElement.className = 'result-display';
+                
+                if (result.startsWith('Ошибка:')) {
+                    showError(result);
+                } else {
+                    resultElement.textContent = result;
+                    errorElement.textContent = '';
+                }
+            } catch (error) {
+                resultElement.className = 'result-display';
+                showError('Произошла ошибка при конвертации: ' + error.message);
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('conversionResult').textContent = '-';
+            document.getElementById('conversionResult').className = 'result-display';
+        }
+        
+        // Поддержка клавиши Enter для конвертации
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'numberInput' || 
+                    activeElement.id === 'fromSystem' || 
+                    activeElement.id === 'toSystem') {
+                    convertWithPython();
+                }
+            }
+        });
+
+        // Автоматическая конвертация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ждем загрузки PyScript и запускаем конвертацию
+            setTimeout(convertWithPython, 3000);
+        });
     </script>
 </body>
 </html>
