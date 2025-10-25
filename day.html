@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="daystyle.css">
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.5.1/core.css" />
     <script type="module" src="https://pyscript.net/releases/2024.5.1/core.js"></script>
-    <title>Бета-версия проекта</title>
+    <title>DigitalClub</title>
 </head>
 <body>
     <!-- Шапка сайта -->
@@ -78,17 +78,17 @@
                     <div class="converter-container">
                         <div class="input-group">
                             <label for="numberInput">Число:</label>
-                            <input type="text" id="numberInput" placeholder="Например: 255 или FF" value="23">
+                            <input type="text" id="numberInput" placeholder="Например: 255 или FF">
                         </div>
             
                         <div class="input-group">
                             <label for="fromSystem">Из системы счисления:</label>
-                            <input type="number" id="fromSystem" min="2" max="36" value="10" placeholder="От 2 до 36">
+                            <input type="number" id="fromSystem" min="2" max="36" placeholder="От 2 до 36">
                         </div>
             
                         <div class="input-group">
                             <label for="toSystem">В систему счисления:</label>
-                            <input type="number" id="toSystem" min="2" max="36" value="2" placeholder="От 2 до 36">
+                            <input type="number" id="toSystem" min="2" max="36" placeholder="От 2 до 36">
                         </div>
             
                         <button onclick="convertWithPython()" class="convert-btn">Конвертировать</button>
@@ -106,6 +106,52 @@
             <!-- Раздел 3 -->
             <section id="section3" class="section">
                 <h2>Рассчёт детерминанта матрицы любого размера</h2>
+                <div class="content">
+                    
+                    <div class="matrix-input">
+                        <label for="matrixSize">Размер матрицы (n×n): </label>
+                        <input type="number" id="matrixSize" class="matrix-size-input" min="1" max="10" value="3">
+                        <button class="calc-btn" onclick="generateMatrix()" id="generateMatrixBtn">Создать матрицу</button>
+                    </div>
+                    
+                    <div id="matrixContainer">
+                        <!-- Матрица будет создана здесь -->
+                    </div>
+                    
+                    <button class="calc-btn" onclick="calculateDeterminant()" id="calculateDetBtn">Вычислить детерминант</button>
+                    
+                    <div id="determinantResult" class="result"></div>
+                    
+                    <script type="py">
+                        import sys
+                        from js import console
+                        
+                        # Увеличиваем лимит рекурсии для больших матриц
+                        sys.setrecursionlimit(2000000000)
+
+                        # Рекурсивная функция вычисления детерминанта
+                        def detn(mat):
+                            if len(mat) == 1:
+                                return mat[0][0]
+                            n = len(mat)
+                            de = 0
+                            for i in range(n):
+                                M_table = []
+                                for j in range(1, n):
+                                    M_string = []
+                                    for k in range(n):
+                                        if k != i:
+                                            M_string.append(mat[j][k])
+                                    M_table.append(M_string)
+                                M = detn(M_table)
+                                de += mat[0][i] * (-1)**(0+i) * M
+                            return de
+                        
+                        # Делаем функцию доступной глобально
+                        from js import window
+                        window.detn = detn
+                    </script>
+                </div>
             </section>
         </div>
     </main>
@@ -368,6 +414,85 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Ждем загрузки PyScript и запускаем конвертацию
             setTimeout(convertWithPython, 3000);
+        });
+
+           // Функции для работы с матрицами
+        function generateMatrix() {
+            console.log("Генерируем матрицу...");
+            try {
+                const size = parseInt(document.getElementById("matrixSize").value);
+                const matrixContainer = document.getElementById("matrixContainer");
+                
+                console.log("Размер матрицы:", size);
+                
+                let html = `<h3>Матрица ${size}×${size}</h3>`;
+                html += '<table class="matrix-table">';
+                
+                for (let i = 0; i < size; i++) {
+                    html += '<tr>';
+                    for (let j = 0; j < size; j++) {
+                        html += `<td><input type="number" id="cell_${i}_${j}" value="0" class="matrix-cell"></td>`;
+                    }
+                    html += '</tr>';
+                }
+                
+                html += '</table>';
+                matrixContainer.innerHTML = html;
+                console.log("Матрица создана успешно");
+                
+            } catch (error) {
+                console.error("Ошибка при создании матрицы:", error);
+                document.getElementById("determinantResult").innerHTML = `Ошибка: ${error}`;
+                document.getElementById("determinantResult").className = "result error";
+            }
+        }
+
+        function calculateDeterminant() {
+            console.log("Вычисляем детерминант...");
+            try {
+                const size = parseInt(document.getElementById("matrixSize").value);
+                const matrix = [];
+                
+                // Собираем матрицу из полей ввода
+                for (let i = 0; i < size; i++) {
+                    const row = [];
+                    for (let j = 0; j < size; j++) {
+                        const cell = document.getElementById(`cell_${i}_${j}`);
+                        if (cell) {
+                            const value = cell.value === "" ? 0 : parseInt(cell.value);
+                            row.push(value);
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    matrix.push(row);
+                }
+                
+                console.log("Собранная матрица:", matrix);
+                
+                // Проверка, загружена ли функция detn из PyScript
+                if (typeof window.detn === 'function') {
+                    console.log("Используем PyScript функцию detn");
+                    const result = window.detn(matrix);
+                    
+                    document.getElementById("determinantResult").className = "result success";
+                    document.getElementById("determinantResult").innerHTML = `Детерминант матрицы = ${result}`;
+                    console.log("Результат:", result);
+                } else {
+                    throw new Error("PyScript функция еще не загружена. Подождите немного и попробуйте снова.");
+                }
+                
+            } catch (error) {
+                console.error("Ошибка при вычислении детерминанта:", error);
+                document.getElementById("determinantResult").className = "result error";
+                document.getElementById("determinantResult").innerHTML = `Ошибка: ${error.message}`;
+            }
+        }
+
+        // Создаем начальную матрицу при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM загружен, создать начальную матрицу...");
+            setTimeout(generateMatrix, 1000);
         });
     </script>
 </body>

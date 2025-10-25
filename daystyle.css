@@ -41,7 +41,7 @@ body {
     margin-bottom: 10px;
     justify-content: center;
     text-align: center;
-    margin-left: 200px;
+    margin-left: 300px;
 }
 
 .header p {
@@ -319,4 +319,71 @@ video {
 .loading {
     color: #3498db;
     font-style: italic;
+}
+
+.matrix-input {
+    margin: 20px 0;
+}
+        
+.matrix-table {
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+        
+.matrix-table input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+        
+.matrix-size-input {
+    width: 80px;
+    padding: 8px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+        
+.calc-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px 0;
+}
+        
+.calc-btn:hover {
+    background: #0056b3;
+}
+        
+.result {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+        
+.error {
+    color: #dc3545;
+    border-left-color: #dc3545;
+}
+        
+.success {
+    color: #28a745;
+    border-left-color: #28a745;
+}
+        
+.status-message {
+    color: #666;
+    font-style: italic;
+    margin: 10px 0;
 }
