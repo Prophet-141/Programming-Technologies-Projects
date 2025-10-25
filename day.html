@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="daystyle.css">
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.5.1/core.css" />
     <script type="module" src="https://pyscript.net/releases/2024.5.1/core.js"></script>
     <title>Бета-версия проекта</title>
@@ -17,8 +17,9 @@
         <div id="audio">
             <a href="./night.html"><img src="./Resources/nightmode.png"></a>
             <p>Не хотите включить музыку для работы?</p>
-            <audio controls loop autoplay src="Resources/Kan Gao - For River Piano Sarah & Tommy's Version.mp3"></audio>
+            <audio controls loop autoplay src="Resources/65daysofstatic - Radio Protector.mp3"></audio>
         </div>
+        <video autoplay muted loop src="./Resources/vecteezy_abstract-flowing-light-ombre-gradient-background_2221733.mp4"></video>
     </header>
 
     <!-- Навигационное меню -->
@@ -74,29 +75,44 @@
             <section id="section2" class="section">
                 <h2>Конвертор чисел из одних систем счисления в другие</h2>
                 <div class="content">
-                    <div id="output2"></div>
-                    <script type="py">
-                        from pyscript import display
-                        display("Hi!")
-                    </script>
+                    <div class="converter-container">
+                        <div class="input-group">
+                            <label for="numberInput">Число:</label>
+                            <input type="text" id="numberInput" placeholder="Введите число">
+                        </div>
+            
+                        <div class="input-group">
+                            <label for="fromSystem">Из системы счисления:</label>
+                            <input type="number" id="fromSystem" min="2" max="36" value="10" placeholder="От 2 до 36">
+                        </div>
+            
+                        <div class="input-group">
+                            <label for="toSystem">В систему счисления:</label>
+                            <input type="number" id="toSystem" min="2" max="36" value="2" placeholder="От 2 до 36">
+                        </div>
+            
+                        <button onclick="convertNumber()" class="convert-btn">Конвертировать</button>
+            
+                        <div class="result-container">
+                            <label>Результат:</label>
+                            <div id="conversionResult" class="result-display">-</div>
+                        </div>
+
+                        <div id="errorMessage" class="error-message"></div>
+                    </div>
                 </div>
             </section>
 
             <!-- Раздел 3 -->
             <section id="section3" class="section">
-                <h2>Рассчёт детерминанта размером 3x3</h2>
-                <div class="content">
-                    <div id="output3"></div>
-                    <script type="py">
-                        from pyscript import display
-                        display("Hi!")
-                    </script>
-                </div>
+                <h2>Рассчёт детерминанта матрицы любого размера</h2>
+
             </section>
         </div>
     </main>
 
     <script>
+        // Java-Script Калькулятор
         let display = document.getElementById('calcDisplay');
         let currentInput = '0';
         let shouldResetDisplay = false;
@@ -128,13 +144,9 @@
 
         function calculate() {
             try {
-                // Заменяем × на * для вычисления
                 let expression = currentInput.replace(/×/g, '*');
-                
-                // Безопасное вычисление выражения
                 let result = eval(expression);
                 
-                // Проверка на бесконечность и NaN
                 if (!isFinite(result)) {
                     throw new Error('Invalid calculation');
                 }
@@ -143,17 +155,17 @@
                 display.value = currentInput;
                 shouldResetDisplay = true;
                 
-            } catch (error) {
+            } 
+            catch (error) {
                 display.value = 'Ошибка';
                 currentInput = '0';
                 shouldResetDisplay = true;
             }
         }
-
-        // Поддержка клавиатуры
+        
+        // Поддержка клавиатуры для калькулятора
         document.addEventListener('keydown', function(event) {
             const key = event.key;
-            
             if (/[0-9]/.test(key)) {
                 appendToDisplay(key);
             } else if (['+', '-', '*', '/', '.'].includes(key)) {
@@ -166,6 +178,75 @@
                 deleteLast();
             }
         });
+
+        // Конвертер систем счисления
+        function convertNumber() {
+            const numberInput = document.getElementById('numberInput').value.trim().toUpperCase();
+            const fromSystem = parseInt(document.getElementById('fromSystem').value);
+            const toSystem = parseInt(document.getElementById('toSystem').value);
+            const resultElement = document.getElementById('conversionResult');
+            const errorElement = document.getElementById('errorMessage');
+        
+            // Сброс сообщений об ошибках
+            errorElement.textContent = '';
+            resultElement.textContent = '-';
+        
+            // Проверка входных данных
+            if (!numberInput) {
+                showError('Пожалуйста, введите число');
+                return;
+            }
+        
+            if (fromSystem < 2 || fromSystem > 36 || toSystem < 2 || toSystem > 36) {
+                showError('Система счисления должна быть от 2 до 36');
+                return;
+            }
+        
+            // Проверка корректности числа для исходной системы счисления
+            const validChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.substring(0, fromSystem);
+            for (let char of numberInput) {
+                if (!validChars.includes(char)) {
+                    showError(`Символ '${char}' недопустим в системе счисления ${fromSystem}`);
+                    return;
+                }
+            }
+        
+            try {
+                // Конвертация через десятичную систему как промежуточную
+                const decimalValue = parseInt(numberInput, fromSystem);
+            
+                if (isNaN(decimalValue)) {
+                    showError('Ошибка при конвертации числа');
+                    return;
+                }
+            
+                // Конвертация в целевую систему счисления
+                const convertedNumber = decimalValue.toString(toSystem).toUpperCase();
+                resultElement.textContent = `${convertedNumber} (${toSystem})`;
+            } 
+            
+            catch (error) {
+            showError('Произошла ошибка при конвертации: ' + error.message);
+        }
+    }
+    
+    function showError(message) {
+        document.getElementById('errorMessage').textContent = message;
+    }
+    
+    // Поддержка клавиши Enter для конвертации
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            // Проверка, находится ли фокус в одном из полей конвертера
+            const activeElement = document.activeElement;
+            if (activeElement.id === 'numberInput' || 
+                activeElement.id === 'fromSystem' || 
+                activeElement.id === 'toSystem') {
+                convertNumber();
+            }
+        }
+    });
+
     </script>
 </body>
 </html>
