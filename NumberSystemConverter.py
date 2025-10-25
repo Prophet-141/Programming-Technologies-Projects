@@ -71,9 +71,13 @@ if non_existing_system_base == True:
     elif not(initial_system_base.isdigit()) or not(transfer_to_system_base.isdigit()):
         print('Введённые системы счисления содержат недопустимые символы или их не существует.')
 
-# Перевод из 10-тичной системы счисления в любую другую систему счисления.
 if (not_bigger_than_system_base == True) and (correct_format == True) and (non_existing_system_base == False):
-    if initial_system_base == 10 and transfer_to_system_base >= 2 and transfer_to_system_base != 10:
+    # Перевод, когда исходная система счисления и та, в которую нужно перевести, равны.
+    if (initial_system_base == transfer_to_system_base) and (transfer_to_system_base >= 2) and (initial_system_base >= 2):
+        print(f'{num}{system_modifier(transfer_to_system_base)}')
+        
+    # Перевод из 10-тичной системы счисления в любую другую систему счисления.
+    elif initial_system_base == 10 and transfer_to_system_base >= 2 and transfer_to_system_base != 10:
         if int(num) != 0:
             while int(num) > 0:
                 ost = int(num) % transfer_to_system_base
@@ -107,3 +111,4 @@ if (not_bigger_than_system_base == True) and (correct_format == True) and (non_e
             print(f'{answer}{system_modifier(transfer_to_system_base)}')
         else:
             print(f'0{system_modifier(transfer_to_system_base)}')
+
