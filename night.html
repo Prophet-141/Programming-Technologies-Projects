@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="nightstyle.css">
+    <title>Welcome to the True Club</title>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <h1>Welcome to <br> the True Club</h1>
+        </div>
+        <div id="audio">
+            <a href="./day.html"><img src="./Resources/daymode.png"></a>
+            <p>Не хотите включить музыку для игры?</p>
+            <div>
+                <audio controls src="Resources/music/The Chords - Sh Boom.mp3"></audio>
+                <p>The Chords - Sh Boom</p>
+            </div>
+            <audio controls src="Resources/music/Play Roulette.mp3"></audio>
+            <audio controls src="Resources/music/Poker Face.mp3"></audio>
+            <audio controls src="Resources/music/Royal Flush.mp3"></audio>
+            <audio controls src="Resources/music/Poker Cheater.mp3"></audio>
+            <audio controls src="Resources/music/Excitement.mp3"></audio>
+            <audio controls src="Resources/music/Feeling Victory.mp3"></audio>
+            <video autoplay muted loop src="./Resources/vecteezy_falling_dollar_coin_money_in_slow_motion_vertical_3d_59456223.mp4"></video>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main class="main">
+        <div class="container">
+            <!-- Раздел 1 - Рулетка -->
+            <section id="section1" class="section">
+                <div class="content">
+                    <div class="casino-container">
+                        <!-- Статус игры -->
+                        <div class="wallet-info">
+                            <h3>Ваш баланс: $<span id="walletAmount">1000</span></h3>
+                        </div>
+
+                        <!-- Ставки -->
+                        <div class="betting-section">
+                            <div class="input-group">
+                                <label for="numberBet">Ставка на число ($):</label>
+                                <input type="number" id="numberBet" min="0" value="0" step="10">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="colorBet">Ставка на цвет ($):</label>
+                                <input type="number" id="colorBet" min="0" value="0" step="10">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="parityBet">Ставка на четность ($):</label>
+                                <input type="number" id="parityBet" min="0" value="0" step="10">
+                            </div>
+                        </div>
+
+                        <!-- Выбор ставок -->
+                        <div class="bet-selection">
+                            <div class="input-group">
+                                <label for="betNumber">Число (0-36):</label>
+                                <input type="number" id="betNumber" min="0" max="36" value="0">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="betColor">Цвет:</label>
+                                <select id="betColor">
+                                    <option value="Красное">Красное</option>
+                                    <option value="Черное">Черное</option>
+                                </select>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="betParity">Четность:</label>
+                                <select id="betParity">
+                                    <option value="Четное">Четное</option>
+                                    <option value="Нечетное">Нечетное</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки управления -->
+                        <div class="game-controls">
+                            <button class="game-btn" onclick="placeBets()">Сделать ставки</button>
+                            <button class="game-btn spin-btn" onclick="spinRoulette()">Крутить рулетку!</button>
+                            <button class="game-btn" onclick="resetGame()">Новая игра</button>
+                        </div>
+
+                        <!-- Результаты -->
+                        <div class="game-results">
+                            <div id="rouletteResult" class="result-display">Результат появится здесь...</div>
+                            <div id="winAmount" class="win-display"></div>
+                            <a href="https://vimeo.com/1123522942"><button class="game-btn spin-btn">Инструкция по выводу выигрыша</button></a>
+                        </div>
+
+                        <!-- История игр -->
+                        <div class="game-history">
+                            <h4>История игр:</h4>
+                            <div id="gameHistory" class="history-list">История игр пуста</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <p id="warning">Создано исключительно в развлекательных целях</p>
+    </main>
+
+    <script>
+        class RouletteGame {
+            constructor() {
+                this.wallet = 1000.0;
+                this.currentBets = [0.0, 0.0, 0.0]; // [число, цвет, четность]
+                this.betChoices = [0, "Красное", "Четное"];
+                this.gameHistory = [];
+                this.betsPlaced = false;
+            }
+
+            placeBets() {
+                try {
+                    const numberBet = parseFloat(document.getElementById("numberBet").value) || 0;
+                    const colorBet = parseFloat(document.getElementById("colorBet").value) || 0;
+                    const parityBet = parseFloat(document.getElementById("parityBet").value) || 0;
+                    const betNumber = parseInt(document.getElementById("betNumber").value) || 0;
+                    const betColor = document.getElementById("betColor").value;
+                    const betParity = document.getElementById("betParity").value;
+
+                    const totalBet = numberBet + colorBet + parityBet;
+
+                    if (totalBet > this.wallet) {
+                        return "Ошибка: Ставка превышает баланс!";
+                    }
+
+                    if (totalBet <= 0) {
+                        return "Ошибка: Сделайте хотя бы одну ставку!";
+                    }
+
+                    if (betNumber < 0 || betNumber > 36) {
+                        return "Ошибка: Число должно быть от 0 до 36!";
+                    }
+
+                    this.currentBets = [numberBet, colorBet, parityBet];
+                    this.betChoices = [betNumber, betColor, betParity];
+                    this.wallet -= totalBet;
+                    this.betsPlaced = true;
+
+                    this.updateDisplay();
+                    return `Ставки приняты! Общая ставка: $${totalBet.toFixed(2)}`;
+                    
+                } catch (error) {
+                    return `Ошибка ввода: ${error.message}`;
+                }
+            }
+
+            spinRoulette() {
+                if (!this.betsPlaced) {
+                    return "Сначала сделайте ставки!";
+                }
+
+                try {
+                    // Генерация результата рулетки
+                    const resultNumber = Math.floor(Math.random() * 37); // 0-36
+                    
+                    // Определение цвета
+                    const redNumbers = [32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3];
+                    let resultColor;
+                    if (resultNumber === 0) {
+                        resultColor = "Зеленое";
+                    } else if (redNumbers.includes(resultNumber)) {
+                        resultColor = "Красное";
+                    } else {
+                        resultColor = "Черное";
+                    }
+                    
+                    // Определение четности
+                    const resultParity = resultNumber % 2 === 0 ? "Четное" : "Нечетное";
+                    
+                    // Расчет выигрыша
+                    let winnings = 0.0;
+                    
+                    // Проверка ставки на число (коэффициент 35:1)
+                    if (resultNumber === this.betChoices[0]) {
+                        winnings += this.currentBets[0] * 35;
+                    }
+                    
+                    // Проверка ставки на цвет (коэффициент 1:1)
+                    if (resultColor === this.betChoices[1]) {
+                        winnings += this.currentBets[1] * 2;
+                    }
+                    
+                    // Проверка ставки на четность (коэффициент 1:1)
+                    if (resultParity === this.betChoices[2]) {
+                        winnings += this.currentBets[2] * 2;
+                    }
+                    
+                    // Обновление баланса
+                    this.wallet += winnings;
+                    
+                    // Добавление в историю
+                    const gameResult = {
+                        result: [resultNumber, resultColor, resultParity],
+                        bets: [...this.currentBets],
+                        choices: [...this.betChoices],
+                        winnings: winnings,
+                        newBalance: this.wallet
+                    };
+                    this.gameHistory.push(gameResult);
+                    
+                    this.betsPlaced = false;
+                    this.updateDisplay();
+                    
+                    return {
+                        success: true,
+                        resultNumber: resultNumber,
+                        resultColor: resultColor,
+                        resultParity: resultParity,
+                        winnings: winnings
+                    };
+                    
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: `Ошибка в игре: ${error.message}`
+                    };
+                }
+            }
+
+            resetGame() {
+                this.wallet = 1000.0;
+                this.currentBets = [0.0, 0.0, 0.0];
+                this.betChoices = [0, "Красное", "Четное"];
+                this.gameHistory = [];
+                this.betsPlaced = false;
+                
+                // Сброс полей ввода
+                document.getElementById("numberBet").value = 0;
+                document.getElementById("colorBet").value = 0;
+                document.getElementById("parityBet").value = 0;
+                document.getElementById("betNumber").value = 0;
+                
+                this.updateDisplay();
+                return "Игра сброшена! Начальный баланс: $1000";
+            }
+
+            updateDisplay() {
+                // Обновление баланса
+                document.getElementById('walletAmount').textContent = this.wallet.toFixed(2);
+                
+                // Обновление истории
+                this.updateGameHistory();
+            }
+
+            updateGameHistory() {
+                const historyElement = document.getElementById('gameHistory');
+                
+                if (!this.gameHistory || this.gameHistory.length === 0) {
+                    historyElement.innerHTML = '<p>История игр пуста</p>';
+                    return;
+                }
+                
+                // Показываем последние 5 игр
+                const recentHistory = this.gameHistory.slice(-5).reverse();
+                
+                historyElement.innerHTML = '';
+                recentHistory.forEach((game, index) => {
+                    if (game && game.result) {
+                        const gameElement = document.createElement('div');
+                        gameElement.className = 'history-item';
+                        gameElement.innerHTML = `
+                            <strong>Игра ${this.gameHistory.length - index}:</strong> 
+                            Выпало: ${game.result[0]} (${game.result[1]}, ${game.result[2]}) | 
+                            Выигрыш: $${game.winnings.toFixed(2)} | 
+                            Баланс: $${game.newBalance.toFixed(2)}
+                        `;
+                        historyElement.appendChild(gameElement);
+                    }
+                });
+            }
+        }
+
+        // Создаем экземпляр игры
+        const rouletteGame = new RouletteGame();
+
+        // Функции для управления игрой
+        function placeBets() {
+            const result = rouletteGame.placeBets();
+            document.getElementById('rouletteResult').textContent = result;
+            document.getElementById('winAmount').textContent = '';
+        }
+
+        function spinRoulette() {
+            const result = rouletteGame.spinRoulette();
+            
+            if (typeof result === 'string') {
+                // Если вернулась ошибка
+                document.getElementById('rouletteResult').textContent = result;
+                document.getElementById('winAmount').textContent = '';
+            } else if (result && result.success) {
+                // Если вернулся успешный результат
+                const resultText = `Выпало: ${result.resultNumber} (${result.resultColor}, ${result.resultParity})`;
+                document.getElementById('rouletteResult').textContent = resultText;
+                document.getElementById('winAmount').textContent = result.winnings > 0 ? 
+                    `Поздравляем! Вы выиграли $${result.winnings.toFixed(2)}!` : 
+                    'В этот раз не повезло. Попробуйте еще!';
+            } else {
+                document.getElementById('rouletteResult').textContent = result.error || 'Неизвестная ошибка';
+            }
+        }
+
+        function resetGame() {
+            const result = rouletteGame.resetGame();
+            document.getElementById('rouletteResult').textContent = result;
+            document.getElementById('winAmount').textContent = '';
+        }
+
+        // Поддержка клавиатуры
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                spinRoulette();
+            }
+            if (event.key === 'r' || event.key === 'R') {
+                if (event.ctrlKey) {
+                    resetGame();
+                }
+            }
+        });
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            rouletteGame.updateDisplay();
+        });
+    </script>
+</body>
+</html>

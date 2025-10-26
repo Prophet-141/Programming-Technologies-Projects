@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="daystyle.css">
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.5.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.5.1/core.js"></script>
+    <title>DigitalClub</title>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <h1>D i g i t a l C l u b</h1>
+        </div>
+        <div id="audio">
+            <a href="./night.html"><img src="./Resources/nightmode.png"></a>
+            <p>Не хотите включить музыку для работы?</p>
+            <div>
+                <audio controls loop src="Resources/music/65daysofstatic - Radio Protector.mp3"></audio>
+                <p>65daysofstatic - Radio Protector</p>
+            </div>
+        </div>
+        <video autoplay muted loop src="./Resources/vecteezy_abstract-flowing-light-ombre-gradient-background_2221733.mp4"></video>
+    </header>
+
+    <!-- Навигационное меню -->
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#section1">Калькулятор</a></li>
+                <li><a href="#section2">Конвертор чисел</a></li>
+                <li><a href="#section3">Рассчёт детерминанта</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Основное содержимое -->
+    <main class="main">
+        <div class="container">
+            <!-- Раздел 1 -->
+            <section id="section1" class="section">
+                <h2>Калькулятор</h2>
+                <div class="content">
+                    <div class="calculator">
+                        <input type="text" id="calcDisplay" class="display" readonly value="0">
+                        <div class="buttons">
+                            <button class="btn clear" onclick="clearDisplay()">C</button>
+                            <button class="btn clear" onclick="deleteLast()">⌫</button>
+                            <button class="btn operator" onclick="appendToDisplay('/')">/</button>
+                            <button class="btn operator" onclick="appendToDisplay('*')">×</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('7')">7</button>
+                            <button class="btn number" onclick="appendToDisplay('8')">8</button>
+                            <button class="btn number" onclick="appendToDisplay('9')">9</button>
+                            <button class="btn operator" onclick="appendToDisplay('-')">-</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('4')">4</button>
+                            <button class="btn number" onclick="appendToDisplay('5')">5</button>
+                            <button class="btn number" onclick="appendToDisplay('6')">6</button>
+                            <button class="btn operator" onclick="appendToDisplay('+')">+</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('1')">1</button>
+                            <button class="btn number" onclick="appendToDisplay('2')">2</button>
+                            <button class="btn number" onclick="appendToDisplay('3')">3</button>
+                            <button class="btn operator" onclick="appendToDisplay('.')">.</button>
+                            
+                            <button class="btn number" onclick="appendToDisplay('0')">0</button>
+                            <button class="btn number" onclick="appendToDisplay('00')">00</button>
+                            <button class="btn equals" onclick="calculate()">=</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел 2 -->
+            <section id="section2" class="section">
+                <h2>Конвертор чисел из одних систем счисления в другие</h2>
+                <div class="content">
+                    <div class="converter-container">
+                        <div class="input-group">
+                            <label for="numberInput">Число:</label>
+                            <input type="text" id="numberInput" placeholder="Например: 255 или FF">
+                        </div>
+            
+                        <div class="input-group">
+                            <label for="fromSystem">Из системы счисления:</label>
+                            <input type="number" id="fromSystem" min="2" max="36" placeholder="От 2 до 36">
+                        </div>
+            
+                        <div class="input-group">
+                            <label for="toSystem">В систему счисления:</label>
+                            <input type="number" id="toSystem" min="2" max="36" placeholder="От 2 до 36">
+                        </div>
+            
+                        <button onclick="convertWithPython()" class="convert-btn">Конвертировать</button>
+            
+                        <div class="result-container">
+                            <label>Результат:</label>
+                            <div id="conversionResult" class="result-display">-</div>
+                        </div>
+
+                        <div id="errorMessage" class="error-message"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел 3 -->
+            <section id="section3" class="section">
+                <h2>Рассчёт детерминанта матрицы любого размера</h2>
+                <div class="content">
+                    
+                    <div class="matrix-input">
+                        <label for="matrixSize">Размер матрицы (n×n): </label>
+                        <input type="number" id="matrixSize" class="matrix-size-input" min="1" max="10" value="3">
+                        <button class="calc-btn" onclick="generateMatrix()" id="generateMatrixBtn">Создать матрицу</button>
+                    </div>
+                    
+                    <div id="matrixContainer">
+                        <!-- Матрица будет создана здесь -->
+                    </div>
+                    
+                    <button class="calc-btn" onclick="calculateDeterminant()" id="calculateDetBtn">Вычислить детерминант</button>
+                    
+                    <div id="determinantResult" class="result"></div>
+                    
+                    <script type="py">
+                        import sys
+                        from js import console
+                        
+                        # Увеличиваем лимит рекурсии для больших матриц
+                        sys.setrecursionlimit(2000000000)
+
+                        # Рекурсивная функция вычисления детерминанта
+                        def detn(mat):
+                            if len(mat) == 1:
+                                return mat[0][0]
+                            n = len(mat)
+                            de = 0
+                            for i in range(n):
+                                M_table = []
+                                for j in range(1, n):
+                                    M_string = []
+                                    for k in range(n):
+                                        if k != i:
+                                            M_string.append(mat[j][k])
+                                    M_table.append(M_string)
+                                M = detn(M_table)
+                                de += mat[0][i] * (-1)**(0+i) * M
+                            return de
+                        
+                        # Делаем функцию доступной глобально
+                        from js import window
+                        window.detn = detn
+                    </script>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- PyScript конвертер -->
+    <py-script>
+        # Изначальные данные и константы.
+        SYMBOLS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        SYSTEMS = '₀₁₂₃₄₅₆₇₈₉'
+        
+        # Функция для создания маленьких чисел системы счисления.
+        def system_modifier(system):
+            system = int(system)
+            if system < 10:
+                return SYSTEMS[system]
+            else:
+                digit1 = system // 10
+                digit2 = system % 10
+                return SYSTEMS[digit1] + SYSTEMS[digit2]
+        
+        def convert_number_python(num, initial_system_base, transfer_to_system_base):
+            try:
+                digits = []
+                answer = ''
+                summ = 0
+                not_bigger_than_system_base = True
+                correct_format = True
+                non_existing_system_base = False
+                
+                # Проверка на корректность системы счисления.
+                try:
+                    initial_system_base = int(initial_system_base)
+                    transfer_to_system_base = int(transfer_to_system_base)
+                    if (initial_system_base < 2) or (transfer_to_system_base < 2):
+                        non_existing_system_base = True
+                except:
+                    non_existing_system_base = True
+            
+                # Проверка формата числа (нет ли некорректных символов).
+                for letter in num:
+                    if letter.upper() not in SYMBOLS:
+                        correct_format = False
+                        break
+            
+                # Замена букв в числе на цифры (если буквы есть) и запись в массив + проверка на непревышение системы счисления.
+                if (correct_format == True) and (non_existing_system_base == False):
+                    for i in num:
+                        i = SYMBOLS.index(i.upper())
+                        if int(i) <= initial_system_base - 1:
+                            digits.append(str(i))
+                        else:
+                            not_bigger_than_system_base = False
+                            break
+            
+                # Проверка, чтобы цифры в числе не превышали значение системы счисления числа (Отрицательный результат).
+                if not_bigger_than_system_base == False:
+                    return f'Ошибка: Число {num} не соответствует системе счисления {initial_system_base}'
+            
+                # Проверка, чтобы число не содержало некорректных символов (Отрицательный результат).
+                if (correct_format == False):
+                    return f'Ошибка: Неправильный формат. В числе {num} присутствует некорректный символ'
+            
+                # Проверка на корректность системы счисления (Отрицательный результат).
+                if non_existing_system_base == True:
+                    return 'Ошибка: Система счисления должна быть числом от 2 до 36'
+            
+                if (not_bigger_than_system_base == True) and (correct_format == True) and (non_existing_system_base == False):
+                    # Перевод, когда исходная система счисления и та, в которую нужно перевести, равны.
+                    if (initial_system_base == transfer_to_system_base):
+                        return f'{num}{system_modifier(transfer_to_system_base)}'
+                        
+                    # Перевод из 10-тичной системы счисления в любую другую систему счисления.
+                    elif initial_system_base == 10:
+                        num_int = int(num)
+                        if num_int != 0:
+                            while num_int > 0:
+                                ost = num_int % transfer_to_system_base
+                                ost = SYMBOLS[ost]
+                                answer = str(ost) + answer
+                                num_int = num_int // transfer_to_system_base
+                            return f'{answer}{system_modifier(transfer_to_system_base)}'
+                        else:
+                            return f'0{system_modifier(transfer_to_system_base)}'
+            
+                    # Перевод из любой системы счисления в 10-тичную систему счисления.
+                    elif (transfer_to_system_base == 10):
+                        digits.reverse()
+                        for i in range(len(digits)):
+                            perevod1 = int(digits[i]) * (initial_system_base ** i)
+                            summ = perevod1 + summ
+                        return f'{summ}{system_modifier(transfer_to_system_base)}'
+            
+                    # Перевод из любой системы счисления в другую любую систему счисления.
+                    else:
+                        # Сначала переводим в десятичную
+                        digits_copy = digits.copy()
+                        digits_copy.reverse()
+                        for i in range(len(digits_copy)):
+                            perevod1 = int(digits_copy[i]) * (initial_system_base ** i)
+                            summ = perevod1 + summ
+                        
+                        # Затем из десятичной в целевую
+                        if summ != 0:
+                            while summ > 0:
+                                ost = summ % transfer_to_system_base
+                                ost = SYMBOLS[ost]
+                                answer = str(ost) + answer
+                                summ = summ // transfer_to_system_base
+                            return f'{answer}{system_modifier(transfer_to_system_base)}'
+                        else:
+                            return f'0{system_modifier(transfer_to_system_base)}'
+                
+                return 'Неизвестная ошибка'
+                
+            except Exception as e:
+                return f'Ошибка выполнения: {str(e)}'
+
+        print("Python конвертер загружен и готов к работе!")
+        
+        # Сохраняем функцию в глобальной области видимости
+        import js
+        js.window.python_convert_function = convert_number_python
+    </py-script>
+
+    <script>
+        // Java-Script Калькулятор
+        let display = document.getElementById('calcDisplay');
+        let currentInput = '0';
+        let shouldResetDisplay = false;
+
+        function appendToDisplay(value) {
+            if (currentInput === '0' || shouldResetDisplay) {
+                currentInput = value;
+                shouldResetDisplay = false;
+            } else {
+                currentInput += value;
+            }
+            display.value = currentInput;
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            display.value = currentInput;
+            shouldResetDisplay = false;
+        }
+
+        function deleteLast() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            display.value = currentInput;
+        }
+
+        function calculate() {
+            try {
+                let expression = currentInput.replace(/×/g, '*');
+                let result = eval(expression);
+                
+                if (!isFinite(result)) {
+                    throw new Error('Invalid calculation');
+                }
+                
+                currentInput = result.toString();
+                display.value = currentInput;
+                shouldResetDisplay = true;
+                
+            } 
+            catch (error) {
+                display.value = 'Ошибка';
+                currentInput = '0';
+                shouldResetDisplay = true;
+            }
+        }
+        
+        // Поддержка клавиатуры для калькулятора
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if (/[0-9]/.test(key)) {
+                appendToDisplay(key);
+            } else if (['+', '-', '*', '/', '.'].includes(key)) {
+                appendToDisplay(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Escape' || key === 'c' || key === 'C') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            }
+        });
+
+        // Конвертер систем счисления
+        function convertWithPython() {
+            const numberInput = document.getElementById('numberInput').value.trim().toUpperCase();
+            const fromSystem = document.getElementById('fromSystem').value;
+            const toSystem = document.getElementById('toSystem').value;
+            const resultElement = document.getElementById('conversionResult');
+            const errorElement = document.getElementById('errorMessage');
+        
+            // Сброс сообщений об ошибках
+            errorElement.textContent = '';
+            resultElement.textContent = 'Вычисление...';
+            resultElement.className = 'result-display loading';
+        
+            // Проверка входных данных
+            if (!numberInput) {
+                showError('Пожалуйста, введите число');
+                return;
+            }
+        
+            if (!fromSystem || !toSystem) {
+                showError('Пожалуйста, укажите системы счисления');
+                return;
+            }
+
+            try {
+                // Проверяем, доступна ли Python функция
+                if (typeof window.python_convert_function === 'undefined') {
+                    showError('Python конвертер еще загружается. Подождите немного и попробуйте снова.');
+                    return;
+                }
+
+                // Вызов Python функции
+                const result = window.python_convert_function(numberInput, fromSystem, toSystem);
+                
+                resultElement.className = 'result-display';
+                
+                if (result.startsWith('Ошибка:')) {
+                    showError(result);
+                } else {
+                    resultElement.textContent = result;
+                    errorElement.textContent = '';
+                }
+            } catch (error) {
+                resultElement.className = 'result-display';
+                showError('Произошла ошибка при конвертации: ' + error.message);
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('conversionResult').textContent = '-';
+            document.getElementById('conversionResult').className = 'result-display';
+        }
+        
+        // Поддержка клавиши Enter для конвертации
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'numberInput' || 
+                    activeElement.id === 'fromSystem' || 
+                    activeElement.id === 'toSystem') {
+                    convertWithPython();
+                }
+            }
+        });
+
+        // Автоматическая конвертация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ждем загрузки PyScript и запускаем конвертацию
+            setTimeout(convertWithPython, 3000);
+        });
+
+           // Функции для работы с матрицами
+        function generateMatrix() {
+            console.log("Генерируем матрицу...");
+            try {
+                const size = parseInt(document.getElementById("matrixSize").value);
+                const matrixContainer = document.getElementById("matrixContainer");
+                
+                console.log("Размер матрицы:", size);
+                
+                let html = `<h3>Матрица ${size}×${size}</h3>`;
+                html += '<table class="matrix-table">';
+                
+                for (let i = 0; i < size; i++) {
+                    html += '<tr>';
+                    for (let j = 0; j < size; j++) {
+                        html += `<td><input type="number" id="cell_${i}_${j}" value="0" class="matrix-cell"></td>`;
+                    }
+                    html += '</tr>';
+                }
+                
+                html += '</table>';
+                matrixContainer.innerHTML = html;
+                console.log("Матрица создана успешно");
+                
+            } catch (error) {
+                console.error("Ошибка при создании матрицы:", error);
+                document.getElementById("determinantResult").innerHTML = `Ошибка: ${error}`;
+                document.getElementById("determinantResult").className = "result error";
+            }
+        }
+
+        function calculateDeterminant() {
+            console.log("Вычисляем детерминант...");
+            try {
+                const size = parseInt(document.getElementById("matrixSize").value);
+                const matrix = [];
+                
+                // Собираем матрицу из полей ввода
+                for (let i = 0; i < size; i++) {
+                    const row = [];
+                    for (let j = 0; j < size; j++) {
+                        const cell = document.getElementById(`cell_${i}_${j}`);
+                        if (cell) {
+                            const value = cell.value === "" ? 0 : parseInt(cell.value);
+                            row.push(value);
+                        } else {
+                            row.push(0);
+                        }
+                    }
+                    matrix.push(row);
+                }
+                
+                console.log("Собранная матрица:", matrix);
+                
+                // Проверка, загружена ли функция detn из PyScript
+                if (typeof window.detn === 'function') {
+                    console.log("Используем PyScript функцию detn");
+                    const result = window.detn(matrix);
+                    
+                    document.getElementById("determinantResult").className = "result success";
+                    document.getElementById("determinantResult").innerHTML = `Детерминант матрицы = ${result}`;
+                    console.log("Результат:", result);
+                } else {
+                    throw new Error("PyScript функция еще не загружена. Подождите немного и попробуйте снова.");
+                }
+                
+            } catch (error) {
+                console.error("Ошибка при вычислении детерминанта:", error);
+                document.getElementById("determinantResult").className = "result error";
+                document.getElementById("determinantResult").innerHTML = `Ошибка: ${error.message}`;
+            }
+        }
+
+        // Создаем начальную матрицу при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM загружен, создать начальную матрицу...");
+            setTimeout(generateMatrix, 1000);
+        });
+    </script>
+</body>
+</html>
