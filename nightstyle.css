@@ -1,0 +1,120 @@
+.casino-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.wallet-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.wallet-info h3 {
+    color: #4CAF50;
+    font-size: 1.5em;
+}
+
+.betting-section, .bet-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-group input, .input-group select {
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus, .input-group select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.game-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.game-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.spin-btn {
+    background: linear-gradient(45deg, #FF416C, #FF4B2B);
+    color: white;
+}
+
+.game-btn:not(.spin-btn) {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.game-results {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.result-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 15px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.win-display {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #4CAF50;
+    padding: 10px;
+}
+
+.game-history {
+    margin-top: 30px;
+}
+
+.history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(255,255,255,0.8);
+    border-radius: 5px;
+    border-left: 4px solid #4CAF50;
+}
