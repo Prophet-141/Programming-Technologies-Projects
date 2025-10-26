@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="daystyle.css">
+    <link rel="stylesheet" href="nightstyle.css">
     <title>Welcome to the True Club</title>
 </head>
 <body>
     <!-- Шапка сайта -->
     <header class="header">
         <div class="container">
-            <h1>W e l c o m e t o t h e T r u e C l u b</h1>
+            <h1>Welcome to <br> the True Club</h1>
         </div>
         <div id="audio">
-            <a href="./night.html"><img src="./Resources/nightmode.png"></a>
+            <a href="./day.html"><img src="./Resources/daymode.png"></a>
             <p>Не хотите включить музыку для игры?</p>
-            <audio controls loop autoplay src="Resources/65daysofstatic - Radio Protector.mp3"></audio>
+            <div>
+                <audio controls src="Resources/music/The Chords - Sh Boom.mp3"></audio>
+                <p>The Chords - Sh Boom</p>
+            </div>
+            <audio controls src="Resources/music/Play Roulette.mp3"></audio>
+            <audio controls src="Resources/music/Poker Face.mp3"></audio>
+            <audio controls src="Resources/music/Royal Flush.mp3"></audio>
+            <audio controls src="Resources/music/Poker Cheater.mp3"></audio>
+            <audio controls src="Resources/music/Excitement.mp3"></audio>
+            <audio controls src="Resources/music/Feeling Victory.mp3"></audio>
+            <video autoplay muted loop src="./Resources/vecteezy_falling_dollar_coin_money_in_slow_motion_vertical_3d_59456223.mp4"></video>
         </div>
-        <video autoplay muted loop src="./Resources/vecteezy_abstract-flowing-light-ombre-gradient-background_2221733.mp4"></video>
     </header>
 
     <!-- Основное содержимое -->
@@ -25,7 +34,6 @@
         <div class="container">
             <!-- Раздел 1 - Рулетка -->
             <section id="section1" class="section">
-                <h2>Европейская Рулетка</h2>
                 <div class="content">
                     <div class="casino-container">
                         <!-- Статус игры -->
@@ -86,6 +94,7 @@
                         <div class="game-results">
                             <div id="rouletteResult" class="result-display">Результат появится здесь...</div>
                             <div id="winAmount" class="win-display"></div>
+                            <a href="https://vimeo.com/1123522942"><button class="game-btn spin-btn">Инструкция по выводу выигрыша</button></a>
                         </div>
 
                         <!-- История игр -->
@@ -293,8 +302,8 @@
                 const resultText = `Выпало: ${result.resultNumber} (${result.resultColor}, ${result.resultParity})`;
                 document.getElementById('rouletteResult').textContent = resultText;
                 document.getElementById('winAmount').textContent = result.winnings > 0 ? 
-                    `🎉 Поздравляем! Вы выиграли $${result.winnings.toFixed(2)}!` : 
-                    '😔 В этот раз не повезло. Попробуйте еще!';
+                    `Поздравляем! Вы выиграли $${result.winnings.toFixed(2)}!` : 
+                    'В этот раз не повезло. Попробуйте еще!';
             } else {
                 document.getElementById('rouletteResult').textContent = result.error || 'Неизвестная ошибка';
             }
