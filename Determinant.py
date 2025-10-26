@@ -57,32 +57,23 @@ while q == 0:
 q = 0
 stroca = []
 mat = []
-print("Самостоятельный ввод(1) или случайный(2)?")
-vyb = 0
-while vyb != 1 and vyb != 2:
-    vyb = int(input())
-    if vyb == 1:
-        for i in range(n):
-            q = 0
-            while q == 0:
-                try:
-                    user_input = input("Строка " + str(i+1) + " введите целые числа через пробел: ")
-                    es = user_input.split()
-                    stroca = list(map(int, es))
-                except ValueError:
-                    print("Ошибка нецелочисленное значение")
-                else:
-                    q = 1
-                    if len(stroca) < n:
-                        for z in range(len(stroca), n):
-                            stroca.append(0)
-                    mat.append(stroca)
-            stroca = []
-    elif vyb == 2:
-        for i in range(n):
-            for j in range(n):
-                stroca.append(random.randrange(-256, 256, 1))
-            mat.append(stroca)
+print("Ввод матрицы:")
+print()
+    for i in range(n):
+        q = 0
+        while q == 0:
+            try:
+                user_input = input("Строка " + str(i+1) + " введите целые числа через пробел: ")
+                es = user_input.split()
+                stroca = list(map(int, es))
+            except ValueError:
+                print("Ошибка нецелочисленное значение")
+            else:
+                q = 1
+                if len(stroca) < n:
+                    for z in range(len(stroca), n):
+                        stroca.append(0)
+                mat.append(stroca)
             stroca = []
 print()
 print("Сама матрица:")
