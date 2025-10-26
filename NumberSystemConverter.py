@@ -98,7 +98,7 @@ if (not_bigger_than_system_base == True) and (correct_format == True) and (non_e
 
     # Перевод из любой системы счисления в другую любую систему счисления.
     else:
-        if summ != 0:
+        if (sum(list(map(int, digits)))) != 0:
             digits.reverse()
             for i in range(len(digits)):
                 perevod1 = int(digits[i]) * (initial_system_base ** i)
@@ -111,4 +111,5 @@ if (not_bigger_than_system_base == True) and (correct_format == True) and (non_e
             print(f'{answer}{system_modifier(transfer_to_system_base)}')
         else:
             print(f'0{system_modifier(transfer_to_system_base)}')
+
 
