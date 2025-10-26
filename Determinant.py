@@ -26,7 +26,8 @@ def det3(mat, n):
                         print(mat[d])
                 if prov == 0:
                     return 0
-            for j in range(0, n):
+            mat[i][k] = 0
+            for j in range(k+1, n):
                 mat[i][j] -= mat[k][j]*v
             if v != 0 and v != 1:
                 shag+=1
@@ -59,22 +60,22 @@ stroca = []
 mat = []
 print("Ввод матрицы:")
 print()
-    for i in range(n):
-        q = 0
-        while q == 0:
-            try:
-                user_input = input("Строка " + str(i+1) + " введите целые числа через пробел: ")
-                es = user_input.split()
-                stroca = list(map(int, es))
-            except ValueError:
-                print("Ошибка нецелочисленное значение")
-            else:
-                q = 1
-                if len(stroca) < n:
-                    for z in range(len(stroca), n):
-                        stroca.append(0)
-                mat.append(stroca)
-            stroca = []
+for i in range(n):
+    q = 0
+    while q == 0:
+        try:
+            user_input = input("Строка " + str(i+1) + " введите целые числа через пробел: ")
+            es = user_input.split()
+            stroca = list(map(int, es))
+        except ValueError:
+            print("Ошибка нецелочисленное значение")
+        else:
+            q = 1
+            if len(stroca) < n:
+                for z in range(len(stroca), n):
+                    stroca.append(0)
+            mat.append(stroca)
+        stroca = []
 print()
 print("Сама матрица:")
 for i in mat:
