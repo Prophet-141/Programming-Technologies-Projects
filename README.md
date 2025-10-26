@@ -1,4 +1,4 @@
-Инструкция по использованию программы «NumberSystemConverter» проекта «DigitalHub»
+Инструкция по использованию программы «NumberSystemConverter» проекта «DigitalClub»
 =========
 
 1. **Установите программу из GitHub на свой ПК. Откройте ее в PyCharm, Visual Studio Code или в другом редакторе. Запустите программу.**
